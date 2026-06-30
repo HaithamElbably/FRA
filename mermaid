@@ -1,0 +1,36 @@
+graph TD
+    %% Node Styling
+    classDef startEnd fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#000;
+    classDef process fill:#cce5ff,stroke:#004085,stroke-width:2px,color:#000;
+    classDef techStep fill:#fff3cd,stroke:#856404,stroke-width:2px,color:#000;
+
+    %% Diagram Nodes
+    Start(["عطل / كارت مقفل / كروت <br> (Fault / Loss / Cards)"]) :::startEnd
+    
+    Check1["جاري التجديد <br> (في حالة أن العطل غير محدد) <br><br> Renewal Guard <br> (If fault is undefined)"] :::process
+    
+    Msg1["رسالة واتس تبين لا يمكن الفحص <br><br> WhatsApp message indicating <br> inspection is not possible"] :::process
+    
+    FRA["جاري التجديد <br> FRA <br><br> (تحويل رسالة الواتس / Forward WhatsApp)"] :::techStep
+    
+    FRU["FRU بالترتيب <br><br> (FRU in sequence)"] :::techStep
+    
+    FRC["FRC"] :::techStep
+    
+    Close["close OSS TT <br><br> (Close Operation Support System Trouble Ticket)"] :::process
+    
+    EndNode(["END"]) :::startEnd
+
+    %% Invisible anchor for side-flow alignment
+    SideMsg["ترتيب رسالة الواتس <br><br> (Arranging WhatsApp message)"] :::process
+
+    %% Flow Connections
+    Start --> Check1
+    Check1 --> Msg1
+    Msg1 --> FRA
+    FRA -->|Feedback Loop| Msg1
+    FRA --> FRU
+    FRU --> FRC
+    SideMsg -.-> FRC
+    FRC --> Close
+    Close --> EndNode
